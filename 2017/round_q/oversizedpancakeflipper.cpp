@@ -47,59 +47,60 @@ using namespace std;
  * Large dataset (Test Set 2 - Hidden)
  * 2 ≤ length of S ≤ 1000.
  */
+
 // solution
-int main()
-{
-    int No_Of_Trial;
-    cin >> No_Of_Trial;
-    for(int Trial= 1;Trial<=No_Of_Trial;Trial++)
-    {
-        //Get the pancake positions
-        string pancake;
-        cin>>pancake;
-
-        // Number of pancakes in current trial
-        int n = pancake.size();
-
-        //Get the Pancake Flipper's capacity
-        int k;
-        cin>>k;
-
-        //Final solution
-        int Number_Of_Flips = 0;
-
-        for(int i=0;i+k <= n;i++)
+namespace codejam_2017_q {
+    void oversized_pancake_flipper(int no_of_trial, string& pancake, int k){
+        for(int Trial= 1;Trial<=no_of_trial;Trial++)
         {
-            if(pancake[i] == '-')
+            // Number of pancakes in current trial
+            int n = pancake.size();
+
+            //Final solution
+            int Number_Of_Flips = 0;
+
+            for(int i=0;i+k <= n;i++)
             {
-
-                for(int j=i;j< i+k;j++)
+                if(pancake[i] == '-')
                 {
-                    pancake[j] = (pancake[j] == '+') ? '-' : '+'; //Flip the pancake
+                    for(int j=i;j< i+k;j++)
+                    {
+                        pancake[j] = (pancake[j] == '+') ? '-' : '+'; //Flip the pancake
+                    }
+                    Number_Of_Flips++;
                 }
-                Number_Of_Flips++;
-
             }
-        }
-        //Now we have flipped pancakes. Check which trials are full of happy faces;
-        //if all are happy faces, then print the number of flips as solution
-        //otherwise print "IMPOSSIBLE"
+            //Now we have flipped pancakes. Check which trials are full of happy faces;
+            //if all are happy faces, then print the number of flips as solution
+            //otherwise print "IMPOSSIBLE"
 
-        bool All_Happyside = true;
-        for (int i = 0; i < n; i++)
-        {
-            All_Happyside = (pancake[i] == '+');
-            if(All_Happyside == false)
-                break;
+            bool All_Happyside = true;
+            for (int i = 0; i < n; i++)
+            {
+                All_Happyside = (pancake[i] == '+');
+                if(!All_Happyside)
+                    break;
+            }
+            printf("Case #%d: ", Trial);
+            if (All_Happyside)
+                printf("%d\n", Number_Of_Flips);
+            else
+                printf("IMPOSSIBLE\n");
         }
-        printf("Case #%d: ", Trial);
-        if (All_Happyside)
-            printf("%d\n", Number_Of_Flips);
-        else
-            printf("IMPOSSIBLE\n");
-
     }
+}
+void call_oversized_pancake()
+{
+    int no_of_trial, k;
+    string pancake;
 
-    return 0;
+    //Get the pancake positions
+    cin >> no_of_trial;
+    cin >> pancake;
+
+    //Get the Pancake Flipper's capacity
+    cin >> k;
+
+    codejam_2017_q::oversized_pancake_flipper(no_of_trial, pancake, k);
 }
 

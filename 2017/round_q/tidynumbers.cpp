@@ -33,21 +33,9 @@ using namespace std;
  * Large dataset (Test Set 2 - Hidden)
  * 1 ≤ N ≤ 1018.
  */
-int main() {
-    int testCount;
-    cin >> testCount;
 
-    for (int i = 0; i < testCount; i++) {
-        long long N;
-        vector <int>vec;
-        cin >> N;
-
-        int c = 0;
-        while (N) {
-            vec.push_back(N % 10);
-            N = N / 10;
-        }
-
+namespace codejam_2017_q{
+    long long tidynumbers(vector<int>& vec){
         int cipher = vec.size();
         if (cipher != 1) {
             for (int a = cipher - 1; a > 0; a--) {
@@ -69,6 +57,25 @@ int main() {
             num = num * 10 + vec[a];
         }
 
+        return num;
+    }
+}
+int call_tidynumbers() {
+    int testCount;
+    cin >> testCount;
+
+    for (int i = 0; i < testCount; i++) {
+        long long N;
+        vector <int>vec;
+        cin >> N;
+
+        int c = 0;
+        while (N) {
+            vec.push_back(N % 10);
+            N = N / 10;
+        }
+
+        long long num = codejam_2017_q::tidynumbers(vec);
         cout << "Case #" << i + 1 << ": " << num << endl;
     }
 

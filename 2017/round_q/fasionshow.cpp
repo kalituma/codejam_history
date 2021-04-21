@@ -39,69 +39,75 @@
 #include <cstdio>
 #include <cstring>
 #include <vector>
+#include <iostream>
 
 #define MAXN 100
 
 using namespace std;
 
-int n;
-bool row[MAXN], col[MAXN], diag1[MAXN * 2 - 1], diag2[MAXN * 2 - 1];
+namespace codejam_2017_q {
 
-int crossSol[MAXN][MAXN], plusSol[MAXN][MAXN];
+    void placeCrosses(const int n, bool* row, bool* col, int crossSol[][MAXN]){
+        for(int i = 0; i < n; i++) {
+            if(row[i]) continue;
+            for(int j = 0; j < n; j++) {
+                if(col[j]) continue;
 
-void placeCrosses() {
-    for(int i = 0; i < n; i++) {
-        if(row[i]) continue;
-        for(int j = 0; j < n; j++) {
-            if(col[j]) continue;
-
-            crossSol[i][j] = 1;
-            col[j] = true;
-            break;
+                crossSol[i][j] = 1;
+                col[j] = true;
+                break;
+            }
         }
+    }
+
+    int placePluses(const int n, bool* diag1, bool* diag2, int plusSol[][MAXN]) {
+        vector<int> ds;
+        for(int i = 0; i < n - 1; i++) {
+            ds.push_back(i);
+            ds.push_back(n * 2 - i - 2);
+        }
+        ds.push_back(n - 1);
+
+        int points = 0;
+        for(int d: ds) {
+            if(diag1[d]) { points++; continue; }
+            int i = d < n ? d : n - 1;
+            int j = d < n ? 0 : d - n + 1;
+
+            for(; i >= 0 && j < n; i--, j++) {
+                if(diag2[i - j + n - 1]) continue;
+
+                plusSol[i][j] = 1;
+                diag2[i - j + n - 1] = true;
+                points++;
+                break;
+            }
+        }
+        return points;
     }
 }
 
-int placePluses() {
-    vector<int> ds;
-    for(int i = 0; i < n - 1; i++) {
-        ds.push_back(i);
-        ds.push_back(n * 2 - i - 2);
-    }
-    ds.push_back(n - 1);
+void call_fasion_show() {
 
-    int points = 0;
-    for(int d: ds) {
-        if(diag1[d]) { points++; continue; }
-        int i = d < n ? d : n - 1;
-        int j = d < n ? 0 : d - n + 1;
+    int n;
+    bool row[MAXN], col[MAXN], diag1[MAXN * 2 - 1], diag2[MAXN * 2 - 1];
+    int crossSol[MAXN][MAXN], plusSol[MAXN][MAXN];
 
-        for(; i >= 0 && j < n; i--, j++) {
-            if(diag2[i - j + n - 1]) continue;
-
-            plusSol[i][j] = 1;
-            diag2[i - j + n - 1] = true;
-            points++;
-            break;
-        }
-    }
-    return points;
-}
-
-int main() {
-    int t; scanf("%d\n", &t);
-    for(int tc = 1; tc <= t; tc++) {
-        int m; scanf("%d %d\n", &n, &m);
-
-        memset(row, 0, sizeof(row));
-        memset(col, 0, sizeof(col));
-        memset(diag1, 0, sizeof(diag1));
-        memset(diag2, 0, sizeof(diag2));
-        memset(crossSol, 0, sizeof(crossSol));
-        memset(plusSol, 0, sizeof(plusSol));
+    int trial;
+    cin >> trial;
+    for(int tc = 1; tc <= trial; tc++) {
+        int m;
+        cin >> n;
+        cin >> m;
 
         for(int i = 0; i < m; i++) {
-            char ch; int r, c; scanf("%c %d %d\n", &ch, &r, &c);
+            char ch;
+            int r, c;
+
+            cin >> ch;
+            cin >> r;
+            cin >> c;
+
             r--; c--;
             if(ch != '+') {
                 crossSol[r][c] = -1;
@@ -113,8 +119,8 @@ int main() {
             }
         }
 
-        placeCrosses();
-        int plusPoints = placePluses();
+        codejam_2017_q::placeCrosses(n, row, col, crossSol);
+        int plusPoints = codejam_2017_q::placePluses(n, diag1, diag2, plusSol);
 
         int pieces = 0;
         for(int i = 0; i < n; i++) {
@@ -133,5 +139,4 @@ int main() {
             }
         }
     }
-    return 0;
 }
